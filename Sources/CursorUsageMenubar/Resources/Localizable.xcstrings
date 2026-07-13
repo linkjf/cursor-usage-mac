@@ -1,0 +1,24 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "api" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "API" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "API" } }
+      }
+    },
+    "loading" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Loading…" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Cargando…" } }
+      }
+    },
+    "settings" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Settings" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Ajustes" } }
+      }
+    }
+  },
+  "version" : "1.0"
+}
