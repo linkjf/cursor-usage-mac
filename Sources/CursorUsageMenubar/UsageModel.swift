@@ -22,7 +22,7 @@ final class UsageModel: ObservableObject {
   var menuBarTooltip: String? {
     guard let usage = snapshot else { return nil }
     var lines = [
-      String(format: L10n.text(.tooltipAPI), usage.apiPercentRemaining, usage.apiPercentUsed),
+      String(format: L10n.text(.tooltipAPI), usage.apiPercentUsed, usage.apiPercentRemaining),
       String(format: L10n.text(.tooltipAuto), usage.autoPercentUsed),
       String(format: L10n.text(.tooltipTotal), usage.totalPercentUsed),
     ]
@@ -178,7 +178,7 @@ final class UsageModel: ObservableObject {
       menuBarContext = stacked.bottom
       statusText = "\(stacked.top)\n\(stacked.bottom)"
     } else {
-      menuBarHero = "\(usage.apiPercentRemaining)%"
+      menuBarHero = "\(usage.apiPercentUsed)%"
       menuBarContext = ""
       statusText = menuBarHero
     }

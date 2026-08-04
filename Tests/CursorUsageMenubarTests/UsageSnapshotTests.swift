@@ -9,11 +9,11 @@ final class UsageSnapshotTests: XCTestCase {
 
   func testMenuBarCompactLabel() {
     let snapshot = makeSnapshot(apiPercentUsed: 48, auto: 7, total: 16)
-    XCTAssertEqual(snapshot.menuBarCompactLabel(), "52% | 7/16")
+    XCTAssertEqual(snapshot.menuBarCompactLabel(), "48% | 7/16")
   }
 
   func testMenuBarStackedLabel() {
-    let snapshot = makeSnapshot(apiPercentUsed: 52, auto: 7, total: 16)
+    let snapshot = makeSnapshot(apiPercentUsed: 48, auto: 7, total: 16)
     let stacked = snapshot.menuBarStackedLabel()
     XCTAssertEqual(stacked.top, "48%")
     XCTAssertEqual(stacked.bottom, "7/16")
