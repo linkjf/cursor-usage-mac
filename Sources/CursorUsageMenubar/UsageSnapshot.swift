@@ -20,11 +20,11 @@ struct UsageSnapshot: Equatable {
   }
 
   func menuBarCompactLabel() -> String {
-    "\(apiPercentRemaining)% | \(autoPercentUsed)/\(totalPercentUsed)"
+    "\(apiPercentUsed)% | \(autoPercentUsed)/\(totalPercentUsed)"
   }
 
   func menuBarStackedLabel() -> (top: String, bottom: String) {
-    ("\(apiPercentRemaining)%", "\(autoPercentUsed)/\(totalPercentUsed)")
+    ("\(apiPercentUsed)%", "\(autoPercentUsed)/\(totalPercentUsed)")
   }
 
   func adviceTitle() -> String {

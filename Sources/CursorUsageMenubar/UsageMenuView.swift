@@ -53,9 +53,9 @@ struct UsageMenuView: View {
   private var header: some View {
     HStack(alignment: .center, spacing: 12) {
       if let usage = model.snapshot {
-        RingGauge(percent: usage.apiPercentRemaining, tier: usage.apiTier)
+        RingGauge(percent: usage.apiPercentUsed, tier: usage.apiTier)
           .accessibilityLabel(L10n.text(.api))
-          .accessibilityValue("\(usage.apiPercentRemaining)%")
+          .accessibilityValue("\(usage.apiPercentUsed)%")
       } else {
         RingGauge(percent: 0, tier: .safe, loading: true)
       }
@@ -66,11 +66,18 @@ struct UsageMenuView: View {
             .font(.system(size: 11, weight: .bold, design: .rounded))
             .foregroundStyle(UsageTheme.accentAPI)
 
-          Text("\(usage.apiPercentRemaining)%")
+          Text("\(usage.apiPercentUsed)%")
             .font(.system(size: 24, weight: .semibold, design: .rounded))
             .foregroundStyle(UsageTheme.textPrimary(colorScheme))
             .monospacedDigit()
 
+          Text(L10n.text(.apiUsed))
+            .font(.system(size: 11, weight: .medium))
+            .foregroundStyle(UsageTheme.textSecondary(colorScheme))
+
+          Text(String(format: L10n.text(.apiRemainingShort), usage.apiPercentRemaining))
+            .font(.system(size: 10))
+            .foregroundStyle(UsageTheme.textTertiary(colorScheme))
           Text(usage.apiTier.label)
             .font(.system(size: 11, weight: .medium))
             .foregroundStyle(usage.apiTier.color)
@@ -113,12 +120,12 @@ struct UsageMenuView: View {
 
         MetricCard(
           label: L10n.text(.api),
-          value: usage.apiPercentRemaining,
+          value: usage.apiPercentUsed,
           usedValue: usage.apiPercentUsed,
           tint: usage.apiTier.color,
-          caption: L10n.text(.captionAPI),
+          caption: String(format: L10n.text(.captionAPIUsed), usage.apiPercentRemaining),
           emphasized: true,
-          showRemaining: true
+          showRemaining: false
         )
 
         MetricCard(
