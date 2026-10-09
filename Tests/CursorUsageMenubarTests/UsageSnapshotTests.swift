@@ -120,15 +120,71 @@ final class UsageSummaryParsingTests: XCTestCase {
   }
 }
 
-// Test-only visibility for private DTO
-private struct UsageSummaryResponse: Decodable {
-  let membershipType: String?
-  let billingCycleEnd: String?
-  let autoModelSelectedDisplayMessage: String?
-  let namedModelSelectedDisplayMessage: String?
-  let individualUsage: IndividualUsageDTO?
+final class ConnectUsageParsingTests: XCTestCase {
+  func testDecodesConnectUsageAndConvertsCycleEndToISO() throws {
+    // Fixture written from the DTO shape in UsageFetcher.swift, not captured from the live API.
+    let json = """
+    {
+      "billingCycleEnd": "1785542400000",
+      "enabled": true,
+      "planUsage": {
+        "includedSpend": 500,
+        "limit": 2000,
+        "remaining": 1500,
+        "autoPercentUsed": 7,
+        "apiPercentUsed": 48,
+        "totalPercentUsed": 16
+      }
+    }
+    """
+    let payload = try JSONDecoder().decode(ConnectUsageResponse.self, from: Data(json.utf8))
+    XCTAssertEqual(payload.planUsage?.apiPercentUsed, 48)
+    XCTAssertEqual(payload.planUsage?.remaining, 1500)
+    XCTAssertEqual(payload.enabled, true)
+    XCTAssertNotNil(payload.billingCycleEndISO)
+  }
 }
 
-private struct IndividualUsageDTO: Decodable {
-  let plan: PlanDTO?
+final class UsageLabelAndErrorTests: XCTestCase {
+  func testUnknownMembershipUsesCursorPlanLabel() {
+    let snapshot = UsageSnapshot(
+      membership: "unknown",
+      accountEmail: nil,
+      totalPercentUsed: 0,
+      autoPercentUsed: 0,
+      apiPercentUsed: 0,
+      limitCents: nil,
+      remainingCents: nil,
+      autoMessage: nil,
+      apiMessage: nil,
+      cycleEnd: "—"
+    )
+    XCTAssertEqual(snapshot.membershipLabel, L10n.text(.membershipUnknown))
+  }
+
+  func testFallbackFailureMentionsBothEndpoints() {
+    let error = UsageFetcherError.fallbackFailed(
+      summary: UsageFetcherError.badResponse(401),
+      fallback: UsageFetcherError.invalidPayload
+    )
+    let message = error.errorDescription ?? ""
+    XCTAssertTrue(message.contains("401"))
+    XCTAssertTrue(message.contains(L10n.text(.errorInvalidPayload)))
+  }
+
+  func testKnownMembershipIsTitleCased() {
+    let snapshot = UsageSnapshot(
+      membership: "pro_plus",
+      accountEmail: nil,
+      totalPercentUsed: 0,
+      autoPercentUsed: 0,
+      apiPercentUsed: 0,
+      limitCents: nil,
+      remainingCents: nil,
+      autoMessage: nil,
+      apiMessage: nil,
+      cycleEnd: "—"
+    )
+    XCTAssertEqual(snapshot.membershipLabel, "Pro Plus")
+  }
 }

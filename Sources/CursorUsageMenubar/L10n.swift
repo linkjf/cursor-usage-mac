@@ -39,6 +39,7 @@ enum L10n {
     case compactLayout
     case stackedLayout
     case includedIn
+    case membershipUnknown
     case total
     case autoComposer
     case api
@@ -58,6 +59,7 @@ enum L10n {
     case errorBadToken
     case errorBadResponse
     case errorInvalidPayload
+    case errorFallbackFailed
     case tooltipAPI
     case tooltipAuto
     case tooltipTotal
@@ -73,6 +75,7 @@ enum L10n {
     case tierWarning
     case tierCritical
     case settingsLaunchHint
+    case settingsLoginApprovalHint
     case settingsMenuBarHint
     case settingsLanguageHint
     case settingsMenuBarPreview
@@ -99,6 +102,7 @@ enum L10n {
       .compactLayout: "Compact (API %)",
       .stackedLayout: "Stacked (API + detail)",
       .includedIn: "Included in %@",
+      .membershipUnknown: "Cursor plan",
       .total: "Total",
       .autoComposer: "Cursor tier",
       .api: "API",
@@ -119,6 +123,7 @@ enum L10n {
       .errorBadToken: "Could not parse Cursor session.",
       .errorBadResponse: "API responded with status %d.",
       .errorInvalidPayload: "Unexpected usage response from Cursor.",
+      .errorFallbackFailed: "%@ (fallback: %@)",
       .tooltipAPI: "API: %d%% used (%d%% remaining)",
       .tooltipAuto: "Cursor tier: %d%% used",
       .tooltipTotal: "Total: %d%% used",
@@ -133,6 +138,7 @@ enum L10n {
       .tierWarning: "High",
       .tierCritical: "Critical",
       .settingsLaunchHint: "Start automatically when you log in.",
+      .settingsLoginApprovalHint: "Approve in System Settings > General > Login Items.",
       .settingsMenuBarHint: "Compact shows API used % only. Stacked adds auto/total below.",
       .settingsLanguageHint: "Follows system by default.",
       .settingsMenuBarPreview: "Preview",
@@ -157,6 +163,7 @@ enum L10n {
       .compactLayout: "Compacto (API %)",
       .stackedLayout: "Apilado (API + detalle)",
       .includedIn: "Incluido en %@",
+      .membershipUnknown: "plan Cursor",
       .total: "Total",
       .autoComposer: "Tier Cursor",
       .api: "API",
@@ -177,6 +184,7 @@ enum L10n {
       .errorBadToken: "No se pudo leer la sesión de Cursor.",
       .errorBadResponse: "La API respondió con estado %d.",
       .errorInvalidPayload: "Respuesta de uso inesperada de Cursor.",
+      .errorFallbackFailed: "%@ (respaldo: %@)",
       .tooltipAPI: "API: %d%% usado (%d%% restante)",
       .tooltipAuto: "Tier Cursor: %d%% usado",
       .tooltipTotal: "Total: %d%% usado",
@@ -191,6 +199,7 @@ enum L10n {
       .tierWarning: "Alto",
       .tierCritical: "Crítico",
       .settingsLaunchHint: "Inicia al iniciar sesión.",
+      .settingsLoginApprovalHint: "Apruébalo en Ajustes del Sistema > General > Elementos de inicio.",
       .settingsMenuBarHint: "Compacto = solo API usado %. Apilado añade auto/total abajo.",
       .settingsLanguageHint: "Por defecto sigue el sistema.",
       .settingsMenuBarPreview: "Vista previa",

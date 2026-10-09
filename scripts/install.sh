@@ -6,12 +6,15 @@ BIN_SRC="$ROOT/.build/release/CursorUsageMenubar"
 INSTALL_DIR="$HOME/.local/bin"
 APP_DIR="$HOME/Applications/Cursor Usage Menubar.app"
 LABEL="com.cursorusage.menubar"
-PLIST="$HOME/Library/LaunchAgents/${LABEL}.plist"
 OLD_LABEL="com.linkjf.cursor-usage-menubar"
 
 echo "Building..."
 cd "$ROOT"
 swift build -c release
+
+# Stop a running instance so the new binary is the one that starts
+pkill -x CursorUsageMenubar 2>/dev/null || true
+sleep 1
 
 mkdir -p "$INSTALL_DIR"
 cp "$BIN_SRC" "$INSTALL_DIR/cursor-usage-menubar"
@@ -40,6 +43,8 @@ cat > "$APP_DIR/Contents/Info.plist" <<'EOF'
   <string>2.0.0</string>
   <key>CFBundleVersion</key>
   <string>2</string>
+  <key>LSMinimumSystemVersion</key>
+  <string>13.0</string>
   <key>LSUIElement</key>
   <true/>
   <key>LSMultipleInstancesProhibited</key>
@@ -50,35 +55,21 @@ cat > "$APP_DIR/Contents/Info.plist" <<'EOF'
 </plist>
 EOF
 
-# Remove legacy launch agent if present
-launchctl bootout "gui/$(id -u)/${OLD_LABEL}" 2>/dev/null || true
-rm -f "$HOME/Library/LaunchAgents/${OLD_LABEL}.plist"
+# Remove LaunchAgent plists from earlier builds; login is a Login Item now
+for label in "$LABEL" "$OLD_LABEL"; do
+  launchctl bootout "gui/$(id -u)/${label}" 2>/dev/null || true
+  rm -f "$HOME/Library/LaunchAgents/${label}.plist"
+done
 
-mkdir -p "$(dirname "$PLIST")"
-cat > "$PLIST" <<EOF
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-  <key>Label</key>
-  <string>${LABEL}</string>
-  <key>ProgramArguments</key>
-  <array>
-    <string>$APP_DIR/Contents/MacOS/CursorUsageMenubar</string>
-  </array>
-  <key>RunAtLoad</key>
-  <true/>
-</dict>
-</plist>
-EOF
+# Launch from the bundle so the app registers Open at Login (on by default, first run only)
+open "$APP_DIR"
 
 echo
 echo "Installed:"
 echo "  CLI: $INSTALL_DIR/cursor-usage-menubar"
 echo "  App: $APP_DIR"
 echo
-echo "Launch at login is OFF by default."
-echo "Enable it from the app Settings panel, or run:"
-echo "  launchctl bootstrap gui/\$(id -u) '$PLIST'"
+echo "Open at Login is ON by default."
+echo "Turn it off in the app Settings or in System Settings > General > Login Items."
 echo
-echo "Menu bar shows API remaining first, e.g. 52% | 7/16"
+echo "Menu bar shows API used % first, e.g. 48% | 7/16"

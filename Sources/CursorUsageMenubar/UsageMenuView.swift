@@ -4,7 +4,23 @@ import SwiftUI
 struct UsageMenuView: View {
   @EnvironmentObject private var model: UsageModel
   @Environment(\.colorScheme) private var colorScheme
-  @AppStorage(AppSettings.launchAtLoginKey) private var launchAtLogin = LaunchAtLoginManager.isEnabled
+  @State private var launchAtLogin = false
+  @State private var loginApprovalPending = false
+
+  private var launchAtLoginBinding: Binding<Bool> {
+    Binding(
+      get: { launchAtLogin },
+      set: { enabled in
+        LaunchAtLoginManager.setEnabled(enabled)
+        refreshLaunchAtLogin()
+      }
+    )
+  }
+
+  private func refreshLaunchAtLogin() {
+    launchAtLogin = LaunchAtLoginManager.isRegistered
+    loginApprovalPending = LaunchAtLoginManager.requiresApproval
+  }
 
   private var menuBarLayoutBinding: Binding<String> {
     Binding(
@@ -37,7 +53,10 @@ struct UsageMenuView: View {
   }
   .frame(width: UsageTheme.panelWidth)
   .background(UsageTheme.surfaceBase(colorScheme))
-  .onAppear { model.setMenuVisible(true) }
+  .onAppear {
+    model.setMenuVisible(true)
+    refreshLaunchAtLogin()
+  }
   .onDisappear { model.setMenuVisible(false) }
   }
 
@@ -203,12 +222,16 @@ struct UsageMenuView: View {
           SettingsToggleRow(
             title: L10n.text(.launchAtLogin),
             subtitle: L10n.text(.settingsLaunchHint),
-            isOn: $launchAtLogin,
+            isOn: launchAtLoginBinding,
             colorScheme: colorScheme,
             compact: true
           )
-          .onChange(of: launchAtLogin) { enabled in
-            _ = LaunchAtLoginManager.setEnabled(enabled)
+
+          if loginApprovalPending {
+            Text(L10n.text(.settingsLoginApprovalHint))
+              .font(.system(size: 10))
+              .foregroundStyle(UsageTheme.textTertiary(colorScheme))
+              .fixedSize(horizontal: false, vertical: true)
           }
         }
 
