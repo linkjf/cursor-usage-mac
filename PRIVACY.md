@@ -31,7 +31,7 @@ No other servers receive your data. There is no analytics SDK, crash reporter, o
 ## Your control
 
 - Quit the app anytime from the popover
-- Uninstall removes the LaunchAgent and app bundle (see README)
+- Uninstall removes the app bundle and CLI (see README); Open at Login is a macOS Login Item you can turn off in Settings
 - Disable launch at login in Settings
 
 ## Contact

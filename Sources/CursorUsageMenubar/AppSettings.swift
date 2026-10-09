@@ -25,13 +25,10 @@ enum MenuBarLayout: String, CaseIterable, Identifiable {
 }
 
 enum AppSettings {
-    static let launchAtLoginKey = "launchAtLogin"
     static let appLanguageKey = "appLanguage"
     static let menuBarLayoutKey = "menuBarLayout"
     static let menuBarColorsKey = "menuBarColors"
 
     static let launchAgentLabel = "com.cursorusage.menubar"
-    static let appBundlePath = "\(NSHomeDirectory())/Applications/Cursor Usage Menubar.app/Contents/MacOS/CursorUsageMenubar"
-
     static let menuBarAppearanceDidChange = Notification.Name("menuBarAppearanceDidChange")
 }

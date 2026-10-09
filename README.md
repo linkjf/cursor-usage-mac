@@ -1,10 +1,10 @@
 # Cursor Usage Menubar
 
-Native macOS menu bar app that shows **Cursor API usage** at a glance — especially how much **named-model API quota remains** (GPT, Claude, Opus) without opening Cursor Settings.
+Native macOS menu bar app that shows **Cursor API usage** at a glance — especially how much of your **named-model API quota is used** (GPT, Claude, Opus) without opening Cursor Settings.
 
 ## Features
 
-- **Menu bar format:** `52% | 7/16` — API **remaining** % | Auto+Composer used / Total used
+- **Menu bar format:** `48% | 7/16` — API **used** % | Cursor tier used (Agent, Composer, Grok, Auto) / Total used
 - **Monochrome menu bar** (v2) — color tiers in the popover panel only
 - **Tooltip** on hover explains each metric
 - **Auto-refresh** when Cursor agents finish (watches `~/.cursor/projects/.../agent-transcripts/`)
@@ -35,7 +35,9 @@ This builds a release binary, installs:
 - **App:** `~/Applications/Cursor Usage Menubar.app`
 - **CLI:** `~/.local/bin/cursor-usage-menubar`
 
-Launch at login is **off by default**. Enable it from the app **Settings** panel.
+Open at Login is **on by default** (System Settings > General > Login Items). Turn it off in the app **Settings** panel.
+
+Agents and step-by-step install, verify, and uninstall: see [AGENTS.md](AGENTS.md).
 
 ### Manual launch
 
@@ -67,8 +69,8 @@ See [PRIVACY.md](PRIVACY.md). Summary:
 ## Uninstall
 
 ```bash
-launchctl bootout "gui/$(id -u)/com.cursorusage.menubar" 2>/dev/null || true
-rm -f ~/Library/LaunchAgents/com.cursorusage.menubar.plist
+# First turn off "Launch at login" in the app Settings
+pkill -x CursorUsageMenubar 2>/dev/null || true
 rm -rf ~/Applications/Cursor\ Usage\ Menubar.app
 rm -f ~/.local/bin/cursor-usage-menubar
 ```

@@ -73,6 +73,7 @@ enum L10n {
     case tierWarning
     case tierCritical
     case settingsLaunchHint
+    case settingsLoginApprovalHint
     case settingsMenuBarHint
     case settingsLanguageHint
     case settingsMenuBarPreview
@@ -133,6 +134,7 @@ enum L10n {
       .tierWarning: "High",
       .tierCritical: "Critical",
       .settingsLaunchHint: "Start automatically when you log in.",
+      .settingsLoginApprovalHint: "Approve in System Settings > General > Login Items.",
       .settingsMenuBarHint: "Compact shows API used % only. Stacked adds auto/total below.",
       .settingsLanguageHint: "Follows system by default.",
       .settingsMenuBarPreview: "Preview",
@@ -191,6 +193,7 @@ enum L10n {
       .tierWarning: "Alto",
       .tierCritical: "Crítico",
       .settingsLaunchHint: "Inicia al iniciar sesión.",
+      .settingsLoginApprovalHint: "Apruébalo en Ajustes del Sistema > General > Elementos de inicio.",
       .settingsMenuBarHint: "Compacto = solo API usado %. Apilado añade auto/total abajo.",
       .settingsLanguageHint: "Por defecto sigue el sistema.",
       .settingsMenuBarPreview: "Vista previa",

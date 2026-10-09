@@ -16,6 +16,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
   func applicationDidFinishLaunching(_ notification: Notification) {
     guard isPrimaryInstance else { return }
 
+    LaunchAtLoginManager.removeLegacyLaunchAgents()
+    LaunchAtLoginManager.applyDefaultOnFirstLaunch()
+
     let model = UsageModel()
     self.model = model
     self.statusBar = StatusBarController(model: model)

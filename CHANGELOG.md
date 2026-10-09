@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+
+- Open at Login uses `SMAppService` (System Settings > Login Items) and is **on by default** on first run from the app bundle
+- Removed LaunchAgent login; install script deletes old `com.cursorusage.menubar` / `com.linkjf.cursor-usage-menubar` plists
+- Menu bar and panel show API **used** % (tier colors still use remaining)
+- Copy: Composer, Grok, and Agent are in the Cursor tier; Grok is not a premium model
+- `LSMinimumSystemVersion` 13.0 in the app bundle
+- `AGENTS.md` with install, verify, and uninstall steps for agents
+
 ## 2.0.0
 
 - Hero metric: API **remaining** % in menu bar (`52% | 7/16`)
