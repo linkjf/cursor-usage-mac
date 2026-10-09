@@ -34,6 +34,8 @@ enum LaunchAtLoginManager {
   @discardableResult
   static func setEnabled(_ enabled: Bool) -> Bool {
     if enabled {
+      // register() throws when the item is already registered, so skip it.
+      if isRegistered { return true }
       do {
         try service.register()
         return true

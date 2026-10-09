@@ -14,6 +14,7 @@ enum UsageFetcherError: LocalizedError {
   case badToken
   case badResponse(Int)
   case invalidPayload
+  case fallbackFailed(summary: Error, fallback: Error)
 
   var errorDescription: String? {
     switch self {
@@ -22,6 +23,12 @@ enum UsageFetcherError: LocalizedError {
     case .badToken: return L10n.text(.errorBadToken)
     case .badResponse(let code): return String(format: L10n.text(.errorBadResponse), code)
     case .invalidPayload: return L10n.text(.errorInvalidPayload)
+    case .fallbackFailed(let summary, let fallback):
+      return String(
+        format: L10n.text(.errorFallbackFailed),
+        summary.localizedDescription,
+        fallback.localizedDescription
+      )
     }
   }
 }
@@ -62,15 +69,23 @@ final class LiveUsageFetcher: UsageFetching {
 
   func fetch() async throws -> UsageSnapshot {
     do {
+      return try await fetchSummaryRetryingAuth()
+    } catch let summaryError {
+      do {
+        return try await fetchConnectRPC()
+      } catch let fallbackError {
+        throw UsageFetcherError.fallbackFailed(summary: summaryError, fallback: fallbackError)
+      }
+    }
+  }
+
+  /// One retry with a fresh token when the summary endpoint rejects the session.
+  private func fetchSummaryRetryingAuth() async throws -> UsageSnapshot {
+    do {
       return try await fetchSummary()
     } catch UsageFetcherError.badResponse(401), UsageFetcherError.badResponse(403) {
       clearTokenCache()
       return try await fetchSummary()
-    } catch {
-      if let snapshot = try? await fetchConnectRPC() {
-        return snapshot
-      }
-      throw error
     }
   }
 
@@ -126,7 +141,9 @@ final class LiveUsageFetcher: UsageFetching {
     }
 
     let payload = try JSONDecoder().decode(ConnectUsageResponse.self, from: data)
-    guard let plan = payload.planUsage else { throw UsageFetcherError.invalidPayload }
+    guard payload.enabled != false, let plan = payload.planUsage else {
+      throw UsageFetcherError.invalidPayload
+    }
 
     let planDTO = PlanDTO(
       enabled: payload.enabled,
@@ -138,8 +155,9 @@ final class LiveUsageFetcher: UsageFetching {
       totalPercentUsed: plan.totalPercentUsed
     )
 
+    // Connect has no membership field; leave it unknown rather than assume a tier.
     return try makeSnapshot(
-      membership: "pro_plus",
+      membership: nil,
       email: try readCachedEmail(),
       plan: planDTO,
       autoMessage: payload.autoModelSelectedDisplayMessage,
@@ -255,7 +273,7 @@ final class LiveUsageFetcher: UsageFetching {
   }
 }
 
-private struct UsageSummaryResponse: Decodable {
+struct UsageSummaryResponse: Decodable {
   let membershipType: String?
   let billingCycleEnd: String?
   let autoModelSelectedDisplayMessage: String?
@@ -263,7 +281,7 @@ private struct UsageSummaryResponse: Decodable {
   let individualUsage: IndividualUsageDTO?
 }
 
-private struct IndividualUsageDTO: Decodable {
+struct IndividualUsageDTO: Decodable {
   let plan: PlanDTO?
 }
 
@@ -277,7 +295,7 @@ struct PlanDTO: Decodable {
   let totalPercentUsed: Double?
 }
 
-private struct ConnectUsageResponse: Decodable {
+struct ConnectUsageResponse: Decodable {
   let billingCycleEnd: String?
   let planUsage: ConnectPlanUsage?
   let enabled: Bool?
@@ -291,7 +309,7 @@ private struct ConnectUsageResponse: Decodable {
   }
 }
 
-private struct ConnectPlanUsage: Decodable {
+struct ConnectPlanUsage: Decodable {
   let includedSpend: Int?
   let limit: Int?
   let remaining: Int?

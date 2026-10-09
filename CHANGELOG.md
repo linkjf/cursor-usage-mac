@@ -8,6 +8,10 @@
 - Copy: Composer, Grok, and Agent are in the Cursor tier; Grok is not a premium model
 - `LSMinimumSystemVersion` 13.0 in the app bundle
 - `AGENTS.md` with install, verify, and uninstall steps for agents
+- Fallback no longer labels every account "Pro Plus"; unknown plans show "Cursor plan"
+- If both usage endpoints fail, the panel shows both errors
+- Login item skips `register()` when already registered
+- Parsing tests now decode the real summary and Connect DTOs
 
 ## 2.0.0
 

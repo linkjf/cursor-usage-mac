@@ -39,6 +39,7 @@ enum L10n {
     case compactLayout
     case stackedLayout
     case includedIn
+    case membershipUnknown
     case total
     case autoComposer
     case api
@@ -58,6 +59,7 @@ enum L10n {
     case errorBadToken
     case errorBadResponse
     case errorInvalidPayload
+    case errorFallbackFailed
     case tooltipAPI
     case tooltipAuto
     case tooltipTotal
@@ -100,6 +102,7 @@ enum L10n {
       .compactLayout: "Compact (API %)",
       .stackedLayout: "Stacked (API + detail)",
       .includedIn: "Included in %@",
+      .membershipUnknown: "Cursor plan",
       .total: "Total",
       .autoComposer: "Cursor tier",
       .api: "API",
@@ -120,6 +123,7 @@ enum L10n {
       .errorBadToken: "Could not parse Cursor session.",
       .errorBadResponse: "API responded with status %d.",
       .errorInvalidPayload: "Unexpected usage response from Cursor.",
+      .errorFallbackFailed: "%@ (fallback: %@)",
       .tooltipAPI: "API: %d%% used (%d%% remaining)",
       .tooltipAuto: "Cursor tier: %d%% used",
       .tooltipTotal: "Total: %d%% used",
@@ -159,6 +163,7 @@ enum L10n {
       .compactLayout: "Compacto (API %)",
       .stackedLayout: "Apilado (API + detalle)",
       .includedIn: "Incluido en %@",
+      .membershipUnknown: "plan Cursor",
       .total: "Total",
       .autoComposer: "Tier Cursor",
       .api: "API",
@@ -179,6 +184,7 @@ enum L10n {
       .errorBadToken: "No se pudo leer la sesión de Cursor.",
       .errorBadResponse: "La API respondió con estado %d.",
       .errorInvalidPayload: "Respuesta de uso inesperada de Cursor.",
+      .errorFallbackFailed: "%@ (respaldo: %@)",
       .tooltipAPI: "API: %d%% usado (%d%% restante)",
       .tooltipAuto: "Tier Cursor: %d%% usado",
       .tooltipTotal: "Total: %d%% usado",

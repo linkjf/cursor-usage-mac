@@ -56,7 +56,7 @@ open ~/Applications/Cursor\ Usage\ Menubar.app
 
 ## API disclaimer
 
-This app calls Cursor's authenticated usage endpoints (`cursor.com/api/usage-summary` with a Connect RPC fallback). It is **unofficial** and not affiliated with Cursor. API shape may change; report issues if parsing breaks.
+This app calls Cursor's authenticated usage endpoints (`cursor.com/api/usage-summary`, with a Connect RPC fallback that runs only when the primary fails). Field-level details are in [AGENTS.md](AGENTS.md). It is **unofficial** and not affiliated with Cursor. API shape may change; report issues if parsing breaks.
 
 ## Privacy
 

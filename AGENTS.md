@@ -73,6 +73,18 @@ rm -f "$HOME/.local/bin/cursor-usage-menubar"
 - `UsageModel.swift`, `UsageSnapshot.swift`, `UsageFetcher.swift`: refresh, metrics, Cursor API and local SQLite token
 - `L10n.swift`: EN and ES strings. Add new keys to both tables
 
+## Usage API contract
+
+Read by `UsageFetcher.swift`. Changing these needs a live check: `swift test` runs `LiveFetcherIntegrationTests` when Cursor is installed.
+
+- **Primary:** `GET https://cursor.com/api/usage-summary` with cookie `WorkosCursorSessionToken=<userId>%3A%3A<jwt>` (`userId` is the JWT `sub` after `|`)
+- **Fallback** (only when the primary fails): `POST https://api2.cursor.sh/aiserver.v1.DashboardService/GetCurrentPeriodUsage` with `Authorization: Bearer <jwt>`, `Connect-Protocol-Version: 1`, body `{}`
+- **Summary fields:** `membershipType`, `billingCycleEnd`, `individualUsage.plan.{enabled, limit, remaining, autoPercentUsed, apiPercentUsed, totalPercentUsed}`
+- **Connect fields:** `enabled`, `billingCycleEnd` (ms as string), `planUsage.{limit, remaining, autoPercentUsed, apiPercentUsed, totalPercentUsed}`. Connect has no membership field; the label shows "Cursor plan"
+- On 401/403 from the summary, the token cache is cleared and the summary is retried once
+- If both endpoints fail, the panel shows both messages
+- **Legacy, not used:** `GET https://cursor.com/api/usage?user=<id>` is the old per-model request dashboard (documented by third-party `cursor-stats`). Do not migrate to it
+
 ## Conventions
 
 - 2-space indent for Swift (see `CONTRIBUTING.md`)

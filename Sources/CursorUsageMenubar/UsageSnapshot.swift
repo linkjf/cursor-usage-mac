@@ -16,7 +16,8 @@ struct UsageSnapshot: Equatable {
   var apiTier: UsageTier { .forRemaining(apiPercentRemaining) }
 
   var membershipLabel: String {
-    membership.replacingOccurrences(of: "_", with: " ").capitalized
+    guard membership != "unknown" else { return L10n.text(.membershipUnknown) }
+    return membership.replacingOccurrences(of: "_", with: " ").capitalized
   }
 
   func menuBarCompactLabel() -> String {
