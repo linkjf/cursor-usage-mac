@@ -21,7 +21,7 @@ The script:
 1. Runs `swift build -c release`
 2. Stops a running `CursorUsageMenubar` process
 3. Installs the CLI to `~/.local/bin/cursor-usage-menubar`
-4. Installs the app bundle to `~/Applications/Cursor Usage Menubar.app` (writes `Info.plist`, `LSUIElement`, `LSMinimumSystemVersion` 13.0)
+4. Installs the app bundle to `~/Applications/Cursor Usage Menubar.app` (writes `Info.plist`, copies `Resources/AppIcon.icns`, `LSUIElement`, `LSMinimumSystemVersion` 13.0)
 5. Deletes LaunchAgent plists `com.cursorusage.menubar` and `com.linkjf.cursor-usage-menubar` (login is not a LaunchAgent anymore)
 6. Opens the app. On its first launch from the bundle it registers **Open at Login** via `SMAppService`, on by default
 

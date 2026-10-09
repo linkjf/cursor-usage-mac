@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- App icon in Finder and Login Items (`Resources/AppIcon.icns`)
 - Open at Login uses `SMAppService` (System Settings > Login Items) and is **on by default** on first run from the app bundle
 - Removed LaunchAgent login; install script deletes old `com.cursorusage.menubar` / `com.linkjf.cursor-usage-menubar` plists
 - Menu bar and panel show API **used** % (tier colors still use remaining)
